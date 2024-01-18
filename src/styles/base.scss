@@ -1,17 +1,37 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.tb-r {
+  border: 1px solid red;
+}
+
+.tb-b {
+  border: 1px solid blue;
+}
+
+.tb-g {
+  border: 1px solid green;
+}
+
+.robocat_gradient {
+  background: linear-gradient(to right, #fcfc21, #ff4545);
+}
+
 html {
-    overflow-x: hidden
+  overflow-x: hidden;
 }
 
 body {
-    font-size: 16px;
-    line-height: 1.5;
-    margin: 0;
-    padding: 0;
-    background-color: #0A0A0B;
-    color: #fff;
+  font-size: 16px;
+  line-height: 1.5;
+  margin: 0;
+  padding: 0;
+  background-color: #0a0a0b;
+  color: #fff;
 }
 
 * {
-    box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
 }

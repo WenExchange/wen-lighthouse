@@ -583,42 +583,70 @@ const Home = () => {
     }
   };
 
+  /** Cat */
+  const onClickCatChecker = () => {};
+
   return (
     <C.Home>
       <C.Bg>
-        <Bg />
+        <img
+          className="w-full h-full object-cover"
+          src="images/robocat_mintbg.png"
+          alt="bg"
+        />
+        {/* <Bg /> */}
       </C.Bg>
       <C.Container>
         <C.Header>
-          <C.Logo src="/images/logo.png" />
-          {wallet === null && (
-            <C.WalletConnect onClick={openWalletConnect}>
-              Connect Wallet
-            </C.WalletConnect>
-          )}
-          {wallet !== null && (
-            <Wallet
-              balance={balance + " SEI"}
-              address={wallet!.accounts[0].address}
+          <div className="flex items-center">
+            <img
+              className="w-[153px]"
+              src="/images/robocat_logo.png"
+              alt="logo"
+            />
+            <p className="mx-[10px] text-2xl">X</p>
+            <C.Logo src="/images/logo.png" />
+          </div>
+
+          <div className="flex items-center">
+            <div
+              className={`mr-[10px] sm:text-[18px] text-[14px] sm:px-[30px] px-[10px] h-[43px] w-fit flex justify-center items-center robocat_gradient text-white  transition-all hover:scale-105 cursor-pointer rounded-md`}
+              onClick={onClickCatChecker}
             >
-              <DropdownItem
-                onClick={() =>
-                  navigator.clipboard.writeText(wallet!.accounts[0].address)
-                }
+              <p>🐱 Cat Checker</p>
+            </div>
+
+            {wallet === null && (
+              <C.WalletConnect onClick={openWalletConnect}>
+                Connect Wallet
+              </C.WalletConnect>
+            )}
+            {wallet !== null && (
+              <Wallet
+                balance={balance + " SEI"}
+                address={wallet!.accounts[0].address}
               >
-                Copy Address
-              </DropdownItem>
-              <DropdownItem
-                onClick={() => {
-                  disconnectWallet();
-                  openWalletConnect();
-                }}
-              >
-                Change Wallet
-              </DropdownItem>
-              <DropdownItem onClick={disconnectWallet}>Disconnect</DropdownItem>
-            </Wallet>
-          )}
+                <DropdownItem
+                  onClick={() =>
+                    navigator.clipboard.writeText(wallet!.accounts[0].address)
+                  }
+                >
+                  Copy Address
+                </DropdownItem>
+                <DropdownItem
+                  onClick={() => {
+                    disconnectWallet();
+                    openWalletConnect();
+                  }}
+                >
+                  Change Wallet
+                </DropdownItem>
+                <DropdownItem onClick={disconnectWallet}>
+                  Disconnect
+                </DropdownItem>
+              </Wallet>
+            )}
+          </div>
         </C.Header>
         <C.Launch showMintedNfts={showMintedNfts ? "true" : "false"}>
           {loading && (
