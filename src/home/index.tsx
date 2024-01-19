@@ -17,6 +17,7 @@ import { MerkleTree } from "merkletreejs";
 import { toast } from "react-hot-toast";
 import MintedModal from "components/mintedModal";
 import axios from "axios";
+import { useSigmaAlert } from "components/SigmaAlert";
 
 const LIGHTHOUSE_CONTRACT_ATLANTIC_2 =
   "sei12gjnfdh2kz06qg6e4y997jfgpat6xpv9dw58gtzn6g75ysy8yt5snzf4ac";
@@ -40,7 +41,8 @@ var interval: any = null;
 var phaseSwitch = false;
 
 const Home = () => {
-  const { openWalletConnect, wallet, disconnectWallet } = useWalletConnect();
+  const { openWalletConnect, wallet, address, disconnectWallet } =
+    useWalletConnect();
 
   const [loading, setLoading] = useState(true);
   const [collection, setCollection] = useState<any>(null);
@@ -584,10 +586,27 @@ const Home = () => {
   };
 
   /** Cat */
-  const onClickCatChecker = () => {};
+  const onClickCatChecker = () => {
+    openCheckerPopup();
+  };
+
+  /** Popups */
+  const {
+    popupComponent: CheckerPopup,
+    openModal: openCheckerPopup,
+    closeModal: closeCheckerPopup
+  } = useSigmaAlert({
+    defaultInfo: {
+      title: "🐱 Cat Checker",
+      subTitle: `Check your RoboCat Identity`
+    },
+    children: <div>Test</div>
+    // closeOnDocumentClick: false
+  });
 
   return (
     <C.Home>
+      {CheckerPopup}
       <C.Bg>
         <img
           className="w-full h-full object-cover"
