@@ -665,10 +665,10 @@ const Home = () => {
                 isValidChecker
                   ? "cursor-pointer"
                   : "opacity-50 cursor-not-allowed"
-              } mr-[10px] sm:text-[18px] text-[14px] sm:px-[30px] px-[10px] h-[43px] w-fit flex justify-center items-center robocat_gradient text-white  transition-all hover:scale-105  rounded-md`}
+              } mr-[10px] sm:text-[18px] text-[14px] sm:px-[30px] px-[10px] h-[43px] w-fit flex justify-center items-center bg-[#1A2B37] text-white  transition-all hover:scale-105  rounded-md`}
               onClick={onClickCatChecker}
             >
-              <p>🐱 Cat Checker</p>
+              <p>Role Check</p>
             </div>
 
             {wallet === null && (
