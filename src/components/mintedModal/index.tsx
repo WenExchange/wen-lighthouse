@@ -4,8 +4,6 @@ import confetti from "canvas-confetti";
 import config from "config.json";
 
 const MintedModal = (props: any) => {
-  console.log(333, "props", props);
-
   useEffect(() => {
     confetti({
       particleCount: 100,
@@ -45,7 +43,6 @@ const MintedModal = (props: any) => {
                   {config.nft_name_type === "token_id" && (
                     <>{props.name + " #" + props.mints[0].mint}</>
                   )}
-                  title
                 </C.NftTitle>
               </C.Nft>
             </C.NftSingle>

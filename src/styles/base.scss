@@ -15,7 +15,8 @@
 }
 
 .robocat_gradient {
-  background: linear-gradient(to right, #fcfc21, #ff4545);
+  // background: linear-gradient(to right, #fcfc21, #ff4545);
+  background: linear-gradient(to right, #1264b5, #ba0aeb);
 }
 
 html {
@@ -61,9 +62,10 @@ body {
 .popup-content {
   background: #1a1a2a;
   max-width: 95%;
-  width: 660px;
+  width: 540px;
   padding: 23px 40px 42px 40px;
   border-radius: 8px;
+  // border: 1px solid red;
 }
 @media screen and (max-width: 600px) {
   .popup-content {
