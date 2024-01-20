@@ -122,7 +122,7 @@ const CatChecker = ({ closePopup, phases }) => {
   }, [idType, displayPhase]);
 
   return (
-    <div className={` mt-[30px] flex flex-col text-[14px] font-thin`}>
+    <div className={`w-[80%] mt-[30px] flex flex-col text-[14px] font-thin`}>
       <div className="flex">{`Address: ${shortenPublicKey(address)}`}</div>
       <div className="min-h-[10px]" />
       {display}

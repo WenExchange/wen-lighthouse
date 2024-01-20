@@ -62,9 +62,10 @@ body {
 .popup-content {
   background: #1a1a2a;
   max-width: 95%;
-  width: 660px;
+  width: 540px;
   padding: 23px 40px 42px 40px;
   border-radius: 8px;
+  // border: 1px solid red;
 }
 @media screen and (max-width: 600px) {
   .popup-content {
