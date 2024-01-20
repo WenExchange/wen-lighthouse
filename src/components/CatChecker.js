@@ -55,7 +55,7 @@ const CatChecker = ({ closePopup, phases }) => {
     }
 
     return (
-      <div className="flex items-center flex-col text-[14px]">
+      <div className=" flex items-center flex-col text-[14px] w-full">
         {_phases.map((phase, index) => {
           return (
             <div
