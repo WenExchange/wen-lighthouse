@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import * as C from "./style";
 import { useWalletConnect } from "hooks/walletConnect";
 import config from "config.json";
@@ -18,6 +18,7 @@ import { toast } from "react-hot-toast";
 import MintedModal from "components/mintedModal";
 import axios from "axios";
 import { useSigmaAlert } from "components/SigmaAlert";
+import CatChecker from "components/CatChecker";
 
 const LIGHTHOUSE_CONTRACT_ATLANTIC_2 =
   "sei12gjnfdh2kz06qg6e4y997jfgpat6xpv9dw58gtzn6g75ysy8yt5snzf4ac";
@@ -587,10 +588,17 @@ const Home = () => {
 
   /** Cat */
   const onClickCatChecker = () => {
-    openCheckerPopup();
+    if (isValidChecker) {
+      openCheckerPopup();
+    } else {
+      openConfirmPopup();
+    }
   };
 
   /** Popups */
+  const closePopup = () => {
+    closeCheckerPopup();
+  };
   const {
     popupComponent: CheckerPopup,
     openModal: openCheckerPopup,
@@ -600,13 +608,37 @@ const Home = () => {
       title: "🐱 Cat Checker",
       subTitle: `Check your RoboCat Identity`
     },
-    children: <div>Test</div>
+    children: <CatChecker closePopup={closePopup} phases={phases} />
     // closeOnDocumentClick: false
   });
+
+  const {
+    popupComponent: ConfirmPopup,
+    openModal: openConfirmPopup,
+    closeModal: closeConfirmPopup
+  } = useSigmaAlert({
+    defaultInfo: {
+      title: "🐱 Cat Confirm",
+      subTitle: `Check your RoboCat Identity`
+    },
+    children: (
+      <div className="mt-[20px] font-semibold text-[24px]">
+        Connect your wallet first
+      </div>
+    )
+    // closeOnDocumentClick: false
+  });
+
+  /** Validations */
+
+  const isValidChecker = useMemo(() => {
+    return phases.length > 0 && address !== undefined;
+  }, [phases, address]);
 
   return (
     <C.Home>
       {CheckerPopup}
+      {ConfirmPopup}
       <C.Bg>
         <img
           className="w-full h-full object-cover"
@@ -629,7 +661,11 @@ const Home = () => {
 
           <div className="flex items-center">
             <div
-              className={`mr-[10px] sm:text-[18px] text-[14px] sm:px-[30px] px-[10px] h-[43px] w-fit flex justify-center items-center robocat_gradient text-white  transition-all hover:scale-105 cursor-pointer rounded-md`}
+              className={`${
+                isValidChecker
+                  ? "cursor-pointer"
+                  : "opacity-50 cursor-not-allowed"
+              } mr-[10px] sm:text-[18px] text-[14px] sm:px-[30px] px-[10px] h-[43px] w-fit flex justify-center items-center robocat_gradient text-white  transition-all hover:scale-105  rounded-md`}
               onClick={onClickCatChecker}
             >
               <p>🐱 Cat Checker</p>
@@ -799,7 +835,7 @@ const Home = () => {
                   <C.LaunchMint>
                     <C.TitleMobile>{config.name}</C.TitleMobile>
                     <C.Image>
-                      <img src="/images/launch.png" alt="launch" />
+                      <img src="/images/launch.gif" alt="launch" />
                     </C.Image>
                     <C.MintInfo>
                       <C.Price>
