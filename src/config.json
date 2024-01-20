@@ -6,12 +6,22 @@
   "discord": "https://discord.gg/seirobocat",
   "rpc": "https://sei-rpc.brocha.in",
   "network": "pacific-1",
-  "collection_address": "sei1ly4xtje6n37vav5w24t4407hwuwnt6r2wkgsc8uv96dhxa6cs83q4z5gch",
+  "collection_address": "sei1vp7m8869rqph38lhhk73p3r4sj8h845pman40wc4utk4defxk5msglx2xl",
   "nft_name_type": "default",
   "groups": [
     {
-      "name": "OG",
+      "name": "team",
       "allowlist": [
+        "sei18uqh4r65wqlpqvdn5qrqejw5h2yfxapvuhl49c",
+        "sei1m9uazcp35d6f74v0wtvygakq6ute9ja3wa4nlh",
+        "sei1w4jvz4hu83y5tgn4jqw20nglmgnr99xm70q7dz",
+        "sei1csd59wn6t9259qz0psllghjazpr3nm25cax0ef"
+      ]
+    },
+    {
+      "name": "og",
+      "allowlist": [
+        "sei130wdpxcpm87cyj6ver950eml4ww3yls7x92s47",
         "sei164dhyz07pq7uauv9gpdgphj7s88dl9z652gala",
         "sei1l9premql2cm9enn3gq307e7wkc986e2spd84dn",
         "sei17hu58yg6tejqthqdlna8vl7dqkd5xg9n6wh9nk",
@@ -382,8 +392,9 @@
       ]
     },
     {
-      "name": "WL",
+      "name": "wl",
       "allowlist": [
+        "sei19t45m6q63060v93gjxprp4j0pu75zxfduqs8rz",
         "sei164dhyz07pq7uauv9gpdgphj7s88dl9z652gala",
         "sei1l9premql2cm9enn3gq307e7wkc986e2spd84dn",
         "sei17hu58yg6tejqthqdlna8vl7dqkd5xg9n6wh9nk",
