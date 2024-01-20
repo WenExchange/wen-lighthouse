@@ -1,6 +1,6 @@
 {
   "name": "Sei Robo Cat",
-  "description": "no cat no life 🐱",
+  "description": "no cat no life🐱",
   "website": "https://www.seirobocat.com",
   "twitter": "https://twitter.com/SeiRoboCat",
   "discord": "https://discord.gg/seirobocat",
@@ -9,6 +9,16 @@
   "collection_address": "sei1plmfsex2gpdhd7nkd68fqt2ejww4pkm8p9ppw834jwqq54sqxlzqme9k5q",
   "nft_name_type": "default",
   "groups": [
+    {
+      "name": "team",
+      "allowlist": [
+        "sei1nhrmjv9wpgy27kmf8fqam4lfngjy7a7ds3jhz5",
+        "sei1wmsr67hwdp4j33tu7jduk2ll603y3sfg77l903",
+        "sei1afnezxkyderr8pr69x2l47sdaw5gsqgv5rfygt",
+        "sei1es8nydvk329d652wu6u8wqg7v7ljv93jyp06dw",
+        "sei1tavxnnqwvyctzj48qf8pjgjg06rmf8y5x6z73r"
+      ]
+    },
     {
       "name": "og",
       "allowlist": [
