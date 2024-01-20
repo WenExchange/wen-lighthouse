@@ -605,8 +605,8 @@ const Home = () => {
     closeModal: closeCheckerPopup
   } = useSigmaAlert({
     defaultInfo: {
-      title: "Wallet Checker",
-      subTitle: `Check your wallet`
+      title: "Role Check",
+      subTitle: `Check your role`
     },
     children: <CatChecker closePopup={closePopup} phases={phases} />
     // closeOnDocumentClick: false
@@ -618,8 +618,8 @@ const Home = () => {
     closeModal: closeConfirmPopup
   } = useSigmaAlert({
     defaultInfo: {
-      title: "Wallet Checker",
-      subTitle: `Check your wallet`
+      title: "Role Check",
+      subTitle: `Check your role`
     },
     children: (
       <div className="mt-[20px] font-semibold text-[24px]">
