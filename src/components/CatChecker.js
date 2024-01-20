@@ -117,17 +117,6 @@ const CatChecker = ({ closePopup, phases }) => {
       {display}
       <div className="mt-[20px] ">{`📌 Is there something wrong?`}</div>
       <div className="flex items-center">
-        <p className="mr-[6px]">{`✅ Wallet Submission at`}</p>
-        <a
-          target="_blank"
-          rel="noreferrer"
-          className="underline text-blue-500"
-          href="https://www.subber.xyz/seirobocat/wallet-collection"
-        >
-          Link
-        </a>
-      </div>
-      <div className="flex items-center">
         <p className="mr-[6px] ">{`✅ Open discord ticket`}</p>
         <a
           target="_blank"

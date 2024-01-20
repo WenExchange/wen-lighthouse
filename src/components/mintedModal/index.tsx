@@ -4,8 +4,6 @@ import confetti from "canvas-confetti";
 import config from "config.json";
 
 const MintedModal = (props: any) => {
-  console.log(333, "props", props);
-
   useEffect(() => {
     confetti({
       particleCount: 100,
