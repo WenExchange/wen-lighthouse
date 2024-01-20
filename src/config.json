@@ -1,23 +1,32 @@
 {
-    "name":"My Project",
-    "description":"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, urna eu aliquet ultricies, urna elit aliquam nunc, quis aliquet nunc nisl quis nisl.",
-    "website":"",
-    "twitter":"",
-    "discord":"",
-    "rpc":"",
-    "network":"atlantic-2", 
-    "collection_address":"", 
-    "nft_name_type": "default",
-    "groups":[
-        {
-            "name":"whitelist",
-            "allowlist":[
-                "sei14v72v7hgzuvgck6v6jsgjacxnt34gj06qnx53d",
-                "sei1t22vwusjlxg4vp7gttsx7n2y9u4k0vv9lpk2ge"
-            ] 
-        },
-        {
-            "name":"public"
-        }
-    ]
+  "name": "Sei Robo Cat",
+  "description": "First Multi-Chain NFT Project on SEI 🔴",
+  "website": "https://www.seirobocat.com",
+  "twitter": "https://twitter.com/SeiRoboCat",
+  "discord": "https://discord.gg/seirobocat",
+  "rpc": "https://sei-rpc.brocha.in",
+  "network": "pacific-1",
+  "collection_address": "sei1ly4xtje6n37vav5w24t4407hwuwnt6r2wkgsc8uv96dhxa6cs83q4z5gch",
+  "nft_name_type": "default",
+  "groups": [
+    {
+      "name": "OG",
+      "allowlist": [
+        "sei18uqh4r65wqlpqvdn5qrqejw5h2yfxapvuhl49c",
+        "sei1m9uazcp35d6f74v0wtvygakq6ute9ja3wa4nlh"
+      ]
+    },
+    {
+      "name": "WL",
+      "allowlist": [
+        "sei1qnzly7grmhc8df0jztmvwzec36xawrpj4gpcdd",
+        "sei1w4jvz4hu83y5tgn4jqw20nglmgnr99xm70q7dz",
+        "sei1csd59wn6t9259qz0psllghjazpr3nm25cax0ef",
+        "sei19t45m6q63060v93gjxprp4j0pu75zxfduqs8rz"
+      ]
+    },
+    {
+      "name": "public"
+    }
+  ]
 }

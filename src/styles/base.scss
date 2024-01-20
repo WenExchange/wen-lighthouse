@@ -1,17 +1,72 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.tb-r {
+  border: 1px solid red;
+}
+
+.tb-b {
+  border: 1px solid blue;
+}
+
+.tb-g {
+  border: 1px solid green;
+}
+
+.robocat_gradient {
+  background: linear-gradient(to right, #fcfc21, #ff4545);
+}
+
 html {
-    overflow-x: hidden
+  overflow-x: hidden;
 }
 
 body {
-    font-size: 16px;
-    line-height: 1.5;
-    margin: 0;
-    padding: 0;
-    background-color: #0A0A0B;
-    color: #fff;
+  font-size: 16px;
+  line-height: 1.5;
+  margin: 0;
+  padding: 0;
+  background-color: #0a0a0b;
+  color: #fff;
 }
 
 * {
-    box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+/** Sigma Alert */
+@keyframes anvil {
+  0% {
+    transform: scale(1) translateY(0px);
+    opacity: 0;
+    box-shadow: 0 0 0 rgba(241, 241, 241, 0);
+  }
+  1% {
+    transform: scale(0.96) translateY(10px);
+    opacity: 0;
+    box-shadow: 0 0 0 rgba(241, 241, 241, 0);
+  }
+  100% {
+    transform: scale(1) translateY(0px);
+    opacity: 1;
+    box-shadow: 0 0 500px rgba(241, 241, 241, 0);
+  }
+}
+.popup-content {
+  -webkit-animation: anvil 0.3s cubic-bezier(0.38, 0.1, 0.36, 0.9) forwards;
+}
+
+.popup-content {
+  background: #1a1a2a;
+  max-width: 95%;
+  width: 660px;
+  padding: 23px 40px 42px 40px;
+  border-radius: 8px;
+}
+@media screen and (max-width: 600px) {
+  .popup-content {
+    padding: 23px 20px 21px 20px;
+  }
 }
