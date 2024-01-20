@@ -13,8 +13,9 @@ const ID_TYPE = {
 
 const CatChecker = ({ closePopup, phases }) => {
   const { groups } = CONFIG;
-  const ogs = groups[0].allowlist;
-  const wls = groups[1].allowlist;
+  const ogs = groups.find((group) => group.name === "og")?.allowlist;
+  const wls = groups.find((group) => group.name === "wl")?.allowlist;
+
   const { openWalletConnect, wallet, address, disconnectWallet } =
     useWalletConnect();
 
@@ -30,65 +31,51 @@ const CatChecker = ({ closePopup, phases }) => {
 
   const idType = React.useMemo(() => {
     if (!address) return ID_TYPE.MEMBER;
+    if (!ogs) return ID_TYPE.MEMBER;
+    if (!wls) return ID_TYPE.MEMBER;
     if (ogs.includes(address)) return ID_TYPE.OG;
     if (wls.includes(address)) return ID_TYPE.WL;
+
     return ID_TYPE.MEMBER;
   }, [address, ogs, wls]);
 
   const displayPhase = React.useMemo(() => {
-    let _phases = [];
-    if (phases.length <= 0) return _phases;
+    let text = <></>;
     switch (idType) {
       case ID_TYPE.OG:
-        _phases = phases;
+        text = (
+          <div className="w-full flex flex-col">
+            <p className="mr-[5px]">{`• 👑 Cat OG (max 1)`}</p>
+            <p className="mr-[5px]">{`• 🐱 Cat WL (max 3)`}</p>
+            <p className="mr-[5px]">{`• Public (max 3)`}</p>
+          </div>
+        );
         break;
       case ID_TYPE.WL:
-        _phases = phases.filter((phase, index) => {
-          return index !== 0;
-        });
+        text = (
+          <div className="w-full flex flex-col">
+            <p className="mr-[5px]">{`• 🐱 Cat WL (max 3)`}</p>
+            <p className="mr-[5px]">{`• Public (max 3)`}</p>
+          </div>
+        );
 
         break;
 
       default:
-        _phases = phases.filter((phase, index) => index === 2);
+        text = (
+          <div className="w-full flex flex-col">
+            <p className="mr-[5px]">{`• Public (max 3)`}</p>
+          </div>
+        );
         break;
     }
 
     return (
       <div className=" flex items-center flex-col text-[14px] w-full">
-        {_phases.map((phase, index) => {
-          return (
-            <div
-              key={index}
-              className="flex items-center justify-between w-full"
-            >
-              <p className="mr-[5px]">{`• ${phase.name} (max ${phase.max_tokens})`}</p>
-              {!phase.noend && (
-                <>
-                  {new Date(phase.start_time) < new Date() &&
-                    new Date(phase.end_time) > new Date() && (
-                      <div className="border-[1px] border-gray-300 p-[3px] flex items-center">
-                        <span>Ends In</span> <Timer date={phase.end_time} />
-                      </div>
-                    )}
-                </>
-              )}
-              {new Date(phase.start_time) > new Date() && (
-                <div className="border-[1px] border-gray-300 p-[3px] flex items-center">
-                  <span>Starts In</span> <Timer date={phase.start_time} />
-                </div>
-              )}{" "}
-              {!phase.noend && new Date(phase.end_time) < new Date() && (
-                <p className="border-[1px] border-gray-300 p-[3px] rounded-md">
-                  Ended
-                </p>
-              )}
-            </div>
-          );
-        })}
+        {text}
       </div>
     );
-  }, [idType, phases]);
+  }, [idType]);
 
   const display = React.useMemo(() => {
     switch (idType) {
@@ -96,7 +83,7 @@ const CatChecker = ({ closePopup, phases }) => {
         return (
           <div className="flex flex-col text-[14px]">
             <div className="my-[10px] ">{`You are [👑 Cat OG]`}</div>
-            <div className="my-[10px] whitespace-pre-wrap">{`[👑 Cat OG] are VIP of our community.\n👇 You can join all following phase `}</div>
+            <div className="my-[10px] whitespace-pre-wrap">{`👇 You can join all following phase `}</div>
             {/* <div className="whitespace-pre-wrap mt-[10px]">{`You can join\n• OG(max 1)\n• WL(max 3)\n• Public(max 3)`}</div> */}
             {displayPhase}
           </div>
@@ -123,7 +110,9 @@ const CatChecker = ({ closePopup, phases }) => {
 
   return (
     <div className={`w-[80%] mt-[30px] flex flex-col text-[14px] font-thin`}>
-      <div className="flex">{`Address: ${shortenPublicKey(address)}`}</div>
+      <div className="flex">{`Connected Address: ${shortenPublicKey(
+        address
+      )}`}</div>
       <div className="min-h-[10px]" />
       {display}
       <div className="mt-[20px] ">{`📌 Is there something wrong?`}</div>

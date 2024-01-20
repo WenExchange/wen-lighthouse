@@ -45,7 +45,6 @@ const MintedModal = (props: any) => {
                   {config.nft_name_type === "token_id" && (
                     <>{props.name + " #" + props.mints[0].mint}</>
                   )}
-                  title
                 </C.NftTitle>
               </C.Nft>
             </C.NftSingle>
