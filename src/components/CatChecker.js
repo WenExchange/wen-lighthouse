@@ -115,7 +115,7 @@ const CatChecker = ({ closePopup, phases }) => {
       )}`}</div>
       <div className="min-h-[10px]" />
       {display}
-      <div className="mt-[20px] ">{`📌 Is there something wrong?`}</div>
+      <div className="mt-[20px] ">{`📌 Is there anything wrong?`}</div>
       <div className="flex items-center">
         <p className="mr-[6px] ">{`✅ Open discord ticket`}</p>
         <a
