@@ -23,13 +23,17 @@ html {
   overflow-x: hidden;
 }
 
-body {
-  font-size: 16px;
-  line-height: 1.5;
-  margin: 0;
-  padding: 0;
-  background-color: #0a0a0b;
-  color: #fff;
+@layer base {
+  html {
+    font-family: RobotoMono;
+    color: #fff;
+    background-color: #0a0a0b;
+    letter-spacing: -0.05em;
+    font-size: 16px;
+    line-height: 1.5;
+    margin: 0;
+    padding: 0;
+  }
 }
 
 * {

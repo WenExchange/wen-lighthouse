@@ -21,6 +21,7 @@ import axios from "axios";
 import { useSigmaAlert } from "components/SigmaAlert";
 import CatChecker from "components/CatChecker";
 import DannyWalletConnector from "../web3/wallet/DannyWalletConnector";
+import DanyLoadingLayout from "../components/Loading/DanyLoadingLayout";
 
 const LIGHTHOUSE_CONTRACT_ATLANTIC_2 =
   "sei12gjnfdh2kz06qg6e4y997jfgpat6xpv9dw58gtzn6g75ysy8yt5snzf4ac";
@@ -729,11 +730,7 @@ const Home = () => {
           </div>
         </C.Header>
         <C.Launch showMintedNfts={showMintedNfts ? "true" : "false"}>
-          {loading && (
-            <C.Loading>
-              <FontAwesomeIcon icon={faCircleNotch} spin />
-            </C.Loading>
-          )}
+          {loading && <DanyLoadingLayout />}
 
           {!loading && (
             <>
