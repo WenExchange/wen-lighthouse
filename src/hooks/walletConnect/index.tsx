@@ -106,7 +106,7 @@ const WalletConnectModal = ({ connectWallet }: any) => {
           <C.Overlay onClick={closeWalletConnect}></C.Overlay>
           <C.Dialog>
             <C.DialogHeader>
-              <C.DialogTitle>Connect SEI Wallet</C.DialogTitle>
+              <C.DialogTitle>Connect ETH Wallet</C.DialogTitle>
               <C.CloseButton onClick={closeWalletConnect}>
                 &times;
               </C.CloseButton>

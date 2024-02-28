@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useMemo } from "react";
 import * as C from "./style";
 import { useWalletConnect } from "hooks/walletConnect";
+
 import config from "config.json";
 import { Bg } from "styles/bg";
 import Wallet, { DropdownItem } from "components/wallet";
@@ -19,6 +20,7 @@ import MintedModal from "components/mintedModal";
 import axios from "axios";
 import { useSigmaAlert } from "components/SigmaAlert";
 import CatChecker from "components/CatChecker";
+import DannyWalletConnector from "../web3/wallet/DannyWalletConnector";
 
 const LIGHTHOUSE_CONTRACT_ATLANTIC_2 =
   "sei12gjnfdh2kz06qg6e4y997jfgpat6xpv9dw58gtzn6g75ysy8yt5snzf4ac";
@@ -42,8 +44,20 @@ var interval: any = null;
 var phaseSwitch = false;
 
 const Home = () => {
-  const { openWalletConnect, wallet, address, disconnectWallet } =
-    useWalletConnect();
+  const {
+    openWalletConnect: connectWallet,
+    wallet,
+    address,
+    disconnectWallet
+  } = useWalletConnect();
+
+  // const {
+  //   wallet,
+  //   address,
+  //   isWalletConnected,
+  //   connectWallet,
+  //   disconnectWallet
+  // } = DannyWalletConnector.useContainer();
 
   const [loading, setLoading] = useState(true);
   const [collection, setCollection] = useState<any>(null);
@@ -64,11 +78,9 @@ const Home = () => {
   useEffect(() => {
     refresh();
     clearInterval(interval);
-
     interval = setInterval(() => {
       refresh();
     }, 5000);
-
     return () => {
       clearInterval(interval);
     };
@@ -83,16 +95,29 @@ const Home = () => {
         get_collection: { collection: config.collection_address }
       })
       .then((result) => {
+        console.log(333, "result", result);
+
         //console.log(result)
+        // let collectionData: any = {
+        //   supply: result.supply,
+        //   mintedSupply: result.next_token_id - result.start_order,
+        //   phases: [],
+        //   tokenUri: result.token_uri,
+        //   name: result.name,
+        //   hidden_metadata: result.hidden_metadata,
+        //   placeholder_token_uri: result.placeholder_token_uri
+        //   // iterated_uri: result.iterated_uri
+        // };
         let collectionData: any = {
-          supply: result.supply,
-          mintedSupply: result.next_token_id - result.start_order,
+          supply: 100,
+          mintedSupply: 10,
           phases: [],
-          tokenUri: result.token_uri,
-          name: result.name,
-          hidden_metadata: result.hidden_metadata,
-          placeholder_token_uri: result.placeholder_token_uri,
-          iterated_uri: result.iterated_uri
+          tokenUri:
+            "https://ipfs.io/ipfs/QmZcH4YvBVVRJtdn4RdbaqgspFU8gH6P9vomDpBVpAL3u4",
+          name: "wen og pass name",
+          hidden_metadata: null,
+          placeholder_token_uri: null
+          // iterated_uri: result.iterated_uri
         };
 
         for (let i = 0; i < config.groups.length; i++) {
@@ -287,7 +312,7 @@ const Home = () => {
   };
 
   const mint = async () => {
-    if (wallet === null) return openWalletConnect();
+    if (wallet === null) return connectWallet();
 
     //check if amount is larger than max tokens
     if (currentPhase.max_tokens > 0 && amount > currentPhase.max_tokens) {
@@ -642,7 +667,7 @@ const Home = () => {
       <C.Bg>
         <img
           className="w-full h-full object-cover"
-          src="images/robocat_mintbg.png"
+          src="images/wen-mintbg.jpeg"
           alt="bg"
         />
         {/* <Bg /> */}
@@ -650,13 +675,9 @@ const Home = () => {
       <C.Container>
         <C.Header>
           <div className="flex items-center">
-            <img
-              className="w-[153px]"
-              src="/images/robocat_logo.png"
-              alt="logo"
-            />
-            <p className="mx-[10px] text-2xl">X</p>
-            <C.Logo src="/images/logo.png" />
+            <img className="w-[153px]" src="/images/logo.png" alt="logo" />
+            {/* <p className="mx-[10px] text-2xl">X</p>
+            <C.Logo src="/images/logo.png" /> */}
           </div>
 
           <div className="flex items-center">
@@ -672,13 +693,17 @@ const Home = () => {
             </div>
 
             {wallet === null && (
-              <C.WalletConnect onClick={openWalletConnect}>
+              <C.WalletConnect
+                onClick={() => {
+                  connectWallet();
+                }}
+              >
                 Connect Wallet
               </C.WalletConnect>
             )}
             {wallet !== null && (
               <Wallet
-                balance={balance + " SEI"}
+                balance={balance + " ETH"}
                 address={wallet!.accounts[0].address}
               >
                 <DropdownItem
@@ -691,7 +716,7 @@ const Home = () => {
                 <DropdownItem
                   onClick={() => {
                     disconnectWallet();
-                    openWalletConnect();
+                    connectWallet();
                   }}
                 >
                   Change Wallet
@@ -821,7 +846,7 @@ const Home = () => {
                             {new BigNumber(phase.unit_price)
                               .div(1e6)
                               .toString()}{" "}
-                            SEI
+                            ETH
                           </C.PhaseBottom>
                           {!phase.noend &&
                             new Date(phase.end_time) < new Date() && (
@@ -845,10 +870,10 @@ const Home = () => {
                             .div(1e6)
                             .times(amount)
                             .toString()}{" "}
-                          SEI
+                          ETH
                         </span>
                       </C.Price>
-                      <C.Amount>
+                      {/* <C.Amount>
                         <C.AmountButton onClick={decrementAmount}>
                           &minus;
                         </C.AmountButton>
@@ -863,10 +888,11 @@ const Home = () => {
                         <C.AmountButton onClick={incrementAmount}>
                           &#43;
                         </C.AmountButton>
-                      </C.Amount>
+                      </C.Amount> */}
                     </C.MintInfo>
                     <C.MintButton
-                      onClick={mint}
+                      // onClick={mint}
+
                       disabled={
                         walletWhitelisted === false ||
                         collection.supply - collection.mintedSupply <= 0
