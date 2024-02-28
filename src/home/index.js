@@ -25,6 +25,8 @@ import DanyLoadingLayout from "../components/Loading/DanyLoadingLayout";
 import useWOPCollectionData from "../web3/hooks/WenOGPassNFT/ReadOnly/useWOPCollectionData";
 import useDanyDidMount from "../hooks/walletConnect/helper/useDanyDidMount";
 import { getMerkleRoot } from "../web3/utils/getMerkleRoot";
+import useWOPBalanceOf from "web3/hooks/WenOGPassNFT/ReadOnly/useWOPBalanceOf";
+import useETHBalance from "../web3/hooks/ETH/useETHBalance";
 
 const LIGHTHOUSE_CONTRACT_ATLANTIC_2 =
   "sei12gjnfdh2kz06qg6e4y997jfgpat6xpv9dw58gtzn6g75ysy8yt5snzf4ac";
@@ -77,7 +79,7 @@ const Home = () => {
   const [showMintedModal, setShowMintedModal] = useState(false);
   const [mintedInfo, setMintedInfo] = useState({});
   const [showMintedNfts, setShowMintedNfts] = useState(false);
-  const [balance, setBalance] = useState("");
+  // const [balance, setBalance] = useState("");
 
   const {
     collectionData,
@@ -87,6 +89,28 @@ const Home = () => {
 
     fetchCollectionData
   } = useWOPCollectionData();
+
+  const {
+    nftBalance,
+    isLoadingNFTBalance,
+    isCallSuccessNFTBalance,
+    displayNFTBalance,
+    fetchNFTBalance
+  } = useWOPBalanceOf();
+
+  const {
+    ethBalance,
+    weiETHBalance,
+    ethBalanceCallState,
+    isLoadingETHBalance,
+    isCallSuccessETHBalance,
+
+    numberedETHBalance: balance,
+    displayETHBalance,
+    displayNumberFormatETHBalance: displayNumberFormat,
+
+    fetchETHBalance
+  } = useETHBalance();
 
   useEffect(() => {
     refresh();
@@ -167,23 +191,10 @@ const Home = () => {
       setMyMintedNfts([]);
       return;
     }
-    const client = await SigningCosmWasmClient.connect(config.rpc);
+    fetchETHBalance();
 
-    let balance = await client.getBalance(wallet?.accounts[0].address, "usei");
-    setBalance(new BigNumber(balance.amount).div(1e6).toString());
-
-    client
-      .queryContractSmart(getLighthouseContract(config.network), {
-        balance_of: {
-          address: wallet?.accounts[0].address,
-          collection: config.collection_address
-        }
-      })
-      .then((result) => {
-        setMyMintedNfts(result.mints);
-
-        client.disconnect();
-      });
+    const balanceCount = await fetchNFTBalance(address);
+    setMyMintedNfts(balanceCount > 0 ? [0] : []);
   };
 
   const managePhases = (phases) => {
@@ -571,7 +582,7 @@ const Home = () => {
         for (let i = 0; i < myMintedNfts.length; i++) {
           promises.push(
             axios
-              .get(`${collection.tokenUri}/${myMintedNfts[i]}`)
+              .get(`${collection.tokenUri}/${myMintedNfts[i]}.json`) // FIXME (json)
               .then((response) => response.data)
           );
         }
@@ -720,14 +731,9 @@ const Home = () => {
               </C.WalletConnect>
             )}
             {wallet !== null && (
-              <Wallet
-                balance={balance + " ETH"}
-                address={wallet?.accounts[0].address}
-              >
+              <Wallet balance={displayETHBalance + " ETH"} address={address}>
                 <DropdownItem
-                  onClick={() =>
-                    navigator.clipboard.writeText(wallet?.accounts[0].address)
-                  }
+                  onClick={() => navigator.clipboard.writeText(address)}
                 >
                   Copy Address
                 </DropdownItem>

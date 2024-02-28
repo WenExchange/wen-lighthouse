@@ -1,6 +1,6 @@
 import React from "react";
 import { ethers } from "ethers";
-import TestCollectionContract from "../../../contracts/TestCollectionContract";
+import WenOGPassNFTContract from "../../../contracts/WenOGPassNFTContract";
 import { ContractCallState } from "../../../constants";
 import useConstantProperties from "../../helpers/useConstantProperties";
 
@@ -11,7 +11,7 @@ import DannyWalletConnector from "../../../wallet/DannyWalletConnector";
 
 dayjs.extend(duration);
 
-export default function useTCBalanceOf() {
+export default function useWOPBalanceOf() {
   const { ethersProvider } = DannyWalletConnector.useContainer();
 
   /** nftBalance */
@@ -25,12 +25,9 @@ export default function useTCBalanceOf() {
   const fetch = async (address) => {
     try {
       setNFTBalanceState(ContractCallState.FETCHING);
-      let _nftBalance = await TestCollectionContract(ethersProvider).balanceOf(
-        address,
-        {
-          from: address
-        }
-      );
+      let _nftBalance = await WenOGPassNFTContract().balanceOf(address, {
+        from: address
+      });
 
       setNFTBalanceState(ContractCallState.SUCCESS);
       setNFTBalance(_nftBalance);
