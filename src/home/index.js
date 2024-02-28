@@ -140,50 +140,6 @@ const Home = () => {
     setCollection(collectionData);
     managePhases(collectionData.phases);
     refreshMyMintedNfts();
-
-    // const client = await SigningCosmWasmClient.connect(config.rpc);
-    // client
-    //   .queryContractSmart(getLighthouseContract(config.network), {
-    //     get_collection: { collection: config.collection_address }
-    //   })
-    //   .then((result) => {
-    //     console.log(333, "result", result);
-
-    //     let collectionData: any = {
-    //       supply: result.supply,
-    //       mintedSupply: result.next_token_id - result.start_order,
-    //       phases: [],
-    //       tokenUri: result.token_uri,
-    //       name: result.name,
-    //       hidden_metadata: result.hidden_metadata,
-    //       placeholder_token_uri: result.placeholder_token_uri
-    //       // iterated_uri: result.iterated_uri
-    //     };
-
-    //     for (let i = 0; i < config.groups.length; i++) {
-    //       for (let j = 0; j < result.mint_groups.length; j++) {
-    //         let group = result.mint_groups[j];
-    //         let groupConfig: any = config.groups[i];
-    //         if (
-    //           groupConfig.name.toLowerCase().trim() ===
-    //           group.name.toLowerCase().trim()
-    //         ) {
-    //           collectionData.phases.push({
-    //             ...group,
-    //             allowlist: groupConfig.allowlist
-    //           });
-    //         }
-    //       }
-    //     }
-
-    //     console.log(333, "collectionData", collectionData);
-
-    //     setCollection(collectionData);
-    //     managePhases(collectionData.phases);
-    //     setLoading(false);
-    //     refreshMyMintedNfts();
-    //     client.disconnect();
-    //   });
   };
 
   const refreshMyMintedNfts = async () => {
@@ -293,7 +249,7 @@ const Home = () => {
         currentPhase.allowlist !== null
       ) {
         let allowlist = currentPhase.allowlist.find(
-          (a) => a === wallet?.accounts[0].address
+          (a) => a?.toLowerCase() === address?.toLowerCase()
         );
         if (allowlist) {
           setWalletWhitelisted(true);
@@ -318,26 +274,6 @@ const Home = () => {
     setCurrentPhase(phase);
     manageWhitelist(phase);
     phaseSwitch = true;
-  };
-
-  const incrementAmount = () => {
-    amountInput.current.value = amount + 1;
-    setAmount(amount + 1);
-  };
-
-  const decrementAmount = () => {
-    if (amount > 1) {
-      amountInput.current.value = amount - 1;
-      setAmount(amount - 1);
-    }
-  };
-
-  const onAmountChange = () => {
-    let value = amountInput.current.value;
-    if (value === "") value = 1;
-    try {
-      setAmount(parseInt(value));
-    } catch (e) {}
   };
 
   const mint = async () => {
