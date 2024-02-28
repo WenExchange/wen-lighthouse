@@ -22,6 +22,9 @@ import { useSigmaAlert } from "components/SigmaAlert";
 import CatChecker from "components/CatChecker";
 import DannyWalletConnector from "../web3/wallet/DannyWalletConnector";
 import DanyLoadingLayout from "../components/Loading/DanyLoadingLayout";
+import useWOPCollectionData from "../web3/hooks/WenOGPassNFT/ReadOnly/useWOPCollectionData";
+import useDanyDidMount from "../hooks/walletConnect/helper/useDanyDidMount";
+import { getMerkleRoot } from "../web3/utils/getMerkleRoot";
 
 const LIGHTHOUSE_CONTRACT_ATLANTIC_2 =
   "sei12gjnfdh2kz06qg6e4y997jfgpat6xpv9dw58gtzn6g75ysy8yt5snzf4ac";
@@ -76,73 +79,84 @@ const Home = () => {
   const [showMintedNfts, setShowMintedNfts] = useState(false);
   const [balance, setBalance] = useState("");
 
+  const {
+    collectionData,
+
+    isLoadingCollectionData: isLoading,
+    isCallSuccessCollectionData: isCallSuccess,
+
+    fetchCollectionData
+  } = useWOPCollectionData();
+
   useEffect(() => {
     refresh();
-    clearInterval(interval);
-    interval = setInterval(() => {
-      refresh();
-    }, 5000);
+    // clearInterval(interval);
+    // interval = setInterval(() => {
+    //   refresh();
+    // }, 5000);
     return () => {
       clearInterval(interval);
     };
   }, [wallet]);
 
-  useEffect(() => {}, []);
+  useDanyDidMount(() => {
+    fetchCollectionData();
+    const root = getMerkleRoot();
+    console.log(555, "root", root);
+  });
 
   const refresh = async () => {
-    const client = await SigningCosmWasmClient.connect(config.rpc);
-    client
-      .queryContractSmart(getLighthouseContract(config.network), {
-        get_collection: { collection: config.collection_address }
-      })
-      .then((result) => {
-        console.log(333, "result", result);
+    const collectionData = await fetchCollectionData();
+    console.log(444, "collectionData", collectionData);
 
-        //console.log(result)
-        // let collectionData: any = {
-        //   supply: result.supply,
-        //   mintedSupply: result.next_token_id - result.start_order,
-        //   phases: [],
-        //   tokenUri: result.token_uri,
-        //   name: result.name,
-        //   hidden_metadata: result.hidden_metadata,
-        //   placeholder_token_uri: result.placeholder_token_uri
-        //   // iterated_uri: result.iterated_uri
-        // };
-        let collectionData: any = {
-          supply: 100,
-          mintedSupply: 10,
-          phases: [],
-          tokenUri:
-            "https://ipfs.io/ipfs/QmZcH4YvBVVRJtdn4RdbaqgspFU8gH6P9vomDpBVpAL3u4",
-          name: "wen og pass name",
-          hidden_metadata: null,
-          placeholder_token_uri: null
-          // iterated_uri: result.iterated_uri
-        };
+    setCollection(collectionData);
+    // managePhases(collectionData.phases);
+    // setLoading(false);
+    // refreshMyMintedNfts();
 
-        for (let i = 0; i < config.groups.length; i++) {
-          for (let j = 0; j < result.mint_groups.length; j++) {
-            let group = result.mint_groups[j];
-            let groupConfig: any = config.groups[i];
-            if (
-              groupConfig.name.toLowerCase().trim() ===
-              group.name.toLowerCase().trim()
-            ) {
-              collectionData.phases.push({
-                ...group,
-                allowlist: groupConfig.allowlist
-              });
-            }
-          }
-        }
+    // const client = await SigningCosmWasmClient.connect(config.rpc);
+    // client
+    //   .queryContractSmart(getLighthouseContract(config.network), {
+    //     get_collection: { collection: config.collection_address }
+    //   })
+    //   .then((result) => {
+    //     console.log(333, "result", result);
 
-        setCollection(collectionData);
-        managePhases(collectionData.phases);
-        setLoading(false);
-        refreshMyMintedNfts();
-        client.disconnect();
-      });
+    //     let collectionData: any = {
+    //       supply: result.supply,
+    //       mintedSupply: result.next_token_id - result.start_order,
+    //       phases: [],
+    //       tokenUri: result.token_uri,
+    //       name: result.name,
+    //       hidden_metadata: result.hidden_metadata,
+    //       placeholder_token_uri: result.placeholder_token_uri
+    //       // iterated_uri: result.iterated_uri
+    //     };
+
+    //     for (let i = 0; i < config.groups.length; i++) {
+    //       for (let j = 0; j < result.mint_groups.length; j++) {
+    //         let group = result.mint_groups[j];
+    //         let groupConfig: any = config.groups[i];
+    //         if (
+    //           groupConfig.name.toLowerCase().trim() ===
+    //           group.name.toLowerCase().trim()
+    //         ) {
+    //           collectionData.phases.push({
+    //             ...group,
+    //             allowlist: groupConfig.allowlist
+    //           });
+    //         }
+    //       }
+    //     }
+
+    //     console.log(333, "collectionData", collectionData);
+
+    //     setCollection(collectionData);
+    //     managePhases(collectionData.phases);
+    //     setLoading(false);
+    //     refreshMyMintedNfts();
+    //     client.disconnect();
+    //   });
   };
 
   const refreshMyMintedNfts = async () => {
