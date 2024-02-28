@@ -25,6 +25,8 @@ import DanyLoadingLayout from "../components/Loading/DanyLoadingLayout";
 import useWOPCollectionData from "../web3/hooks/WenOGPassNFT/ReadOnly/useWOPCollectionData";
 import useDanyDidMount from "../hooks/walletConnect/helper/useDanyDidMount";
 import { getMerkleRoot } from "../web3/utils/getMerkleRoot";
+import Proof from "../web3/utils/getProof";
+
 import useWOPBalanceOf from "web3/hooks/WenOGPassNFT/ReadOnly/useWOPBalanceOf";
 import useETHBalance from "../web3/hooks/ETH/useETHBalance";
 import useWOPMint from "../web3/hooks/WenOGPassNFT/useWOPMint";
@@ -158,7 +160,7 @@ const Home = () => {
     fetchETHBalance();
 
     const balanceCount = await fetchNFTBalance(address);
-    setMyMintedNfts(balanceCount > 0 ? [0] : []);
+    setMyMintedNfts(balanceCount > 0 ? [1] : []);
   };
 
   const managePhases = (phases) => {
@@ -285,96 +287,64 @@ const Home = () => {
   };
 
   const mint = async () => {
-    if (wallet === null) return connectWallet();
-
-    //check if amount is larger than max tokens
-    if (currentPhase.max_tokens > 0 && amount > currentPhase.max_tokens) {
-      toast.error(
-        "You can only mint " + currentPhase.max_tokens + " tokens per wallet"
-      );
-      return;
-    }
-
-    //check if amount is larger than remaining tokens
-    if (amount > collection.supply - collection.mintedSupply) {
-      toast.error(
-        "There are only " +
-          (collection.supply - collection.mintedSupply) +
-          " tokens left"
-      );
-      return;
-    }
-
-    //check if current phase is active
-    if (new Date(currentPhase.start_time) > new Date()) {
-      toast.error("This phase has not started yet");
-      return;
-    }
-
-    //check if current phase has ended
-    if (!currentPhase.noend && new Date(currentPhase.end_time) < new Date()) {
-      toast.error("This phase has ended");
-      return;
-    }
-
-    //load client
-    // const client = await getSigningCosmWasmClient(
-    //   config.rpc,
-    //   wallet.offlineSigner,
-    //   {
-    //     gasPrice: GasPrice.fromString("0.01usei")
-    //   }
-    // );
-
-    // let lighthouseConfig = await client.queryContractSmart(
-    //   getLighthouseContract(config.network),
-    //   { get_config: {} }
-    // );
-
-    //check if wallet have enough balance
-
-    let merkleProof = null;
-    let hashedAddress = null;
-
-    if (currentPhase.merkle_root !== "" && currentPhase.merkle_root !== null) {
-      const { keccak256 } = ethers;
-      let leaves = currentPhase.allowlist.map((addr) => keccak256(addr));
-      const merkleTree = new MerkleTree(leaves, keccak256, { sortPairs: true });
-      console.log(333, "merkleTree", merkleTree);
-
-      hashedAddress = keccak256(address);
-      console.log(333, "hashedAddress", hashedAddress);
-      merkleProof = merkleTree.getHexProof(hashedAddress);
-      console.log(333, "merkleProof", merkleProof);
-    }
-
     try {
-      const receipt = await fetchWOPMint([`\'${merkleProof}\'`]);
+      if (wallet === null) return connectWallet();
 
-      // let tokenIds = [];
+      //check if amount is larger than max tokens
+      if (currentPhase.max_tokens > 0 && amount > currentPhase.max_tokens) {
+        toast.error(
+          "You can only mint " + currentPhase.max_tokens + " tokens per wallet"
+        );
+        return;
+      }
 
-      // const logs = mintReceipt.logs;
-      // for (const log of logs) {
-      //   const events = log.events;
-      //   for (const event of events) {
-      //     if (event.type === "wasm") {
-      //       // Find the attribute with the key 'collection'
-      //       for (const attribute of event.attributes) {
-      //         if (attribute.key === "token_id") {
-      //           tokenIds.push(attribute.value);
-      //           break;
-      //         }
-      //       }
-      //     }
-      //   }
-      // }
+      //check if amount is larger than remaining tokens
+      if (amount > collection.supply - collection.mintedSupply) {
+        toast.error(
+          "There are only " +
+            (collection.supply - collection.mintedSupply) +
+            " tokens left"
+        );
+        return;
+      }
 
-      console.log(444, "receipt", receipt);
+      //check if current phase is active
+      if (new Date(currentPhase.start_time) > new Date()) {
+        toast.error("This phase has not started yet");
+        return;
+      }
+
+      //check if current phase has ended
+      if (!currentPhase.noend && new Date(currentPhase.end_time) < new Date()) {
+        toast.error("This phase has ended");
+        return;
+      }
+
+      let merkleProof = null;
+      let hashedAddress = null;
+
+      if (
+        currentPhase.merkle_root !== "" &&
+        currentPhase.merkle_root !== null
+      ) {
+        const { keccak256 } = ethers;
+        let leaves = currentPhase.allowlist.map((addr) => keccak256(addr));
+        const merkleTree = new MerkleTree(leaves, keccak256, {
+          sortPairs: true
+        });
+        hashedAddress = keccak256(address);
+        merkleProof = merkleTree.getHexProof(hashedAddress);
+      }
+
+      if (!Array.isArray(merkleProof)) throw new Error("Invalid Proof");
+      if (merkleProof.length <= 0) throw new Error("Invalid Proof");
+
+      const receipt = await fetchWOPMint(merkleProof);
 
       refresh();
       refreshMyMintedNfts();
 
-      let tokenIds = [0];
+      let tokenIds = [1];
       loadNowMintedMetadata(tokenIds)
         .then((metadata) => {
           setMintedInfo({ mints: metadata });
@@ -385,17 +355,8 @@ const Home = () => {
           setShowMintedModal(true);
           console.log(e);
         });
-    } catch (e) {
-      toast.dismiss(loading);
-      if (e.message.includes("Max Tokens Minted"))
-        toast.error(
-          "You can only mint " +
-            currentPhase.max_tokens +
-            " tokens per wallet for this phase"
-        );
-      else if (e.message !== "Transaction declined") toast.error("Mint failed");
-
-      console.log(e);
+    } catch (error) {
+      console.log(error.message);
     }
   };
 
@@ -404,65 +365,29 @@ const Home = () => {
       let metadata = [];
       let promises = [];
 
-      if (!collection.hidden_metadata) {
-        if (!collection.iterated_uri) {
-          for (let i = 0; i < mints.length; i++) {
-            promises.push(
-              axios
-                .get(`${collection.tokenUri}/${mints[i]}`)
-                .then((response) => response.data)
-            );
-          }
+      for (let i = 0; i < mints.length; i++) {
+        promises.push(
+          axios
+            .get(`${collection.tokenUri}/${mints[i]}.json`)
+            .then((response) => response.data)
+        );
+      }
 
-          Promise.all(promises)
-            .then((results) => {
-              //merge with myMintedNfts
-              mints.forEach((mint, index) => {
-                metadata.push({
-                  mint: mint,
-                  data: results[index]
-                });
-              });
-
-              resolve(metadata);
-            })
-            .catch((e) => {
-              reject(e);
-            });
-        } else {
-          let tokenurimetadata = await axios
-            .get(collection.tokenUri)
-            .then((response) => response.data);
-
-          for (let i = 0; i < mints.length; i++) {
+      Promise.all(promises)
+        .then((results) => {
+          //merge with myMintedNfts
+          mints.forEach((mint, index) => {
             metadata.push({
-              mint: mints[i],
-              data: {
-                ...tokenurimetadata,
-                name: collection.name + " #" + mints[i]
-              }
+              mint: mint,
+              data: results[index]
             });
-          }
+          });
 
           resolve(metadata);
-        }
-      } else {
-        let placeholder_metadata = await axios
-          .get(collection.placeholder_token_uri)
-          .then((response) => response.data);
-
-        for (let i = 0; i < mints.length; i++) {
-          metadata.push({
-            mint: mints[i],
-            data: {
-              ...placeholder_metadata,
-              name: collection.name + " #" + mints[i]
-            }
-          });
-        }
-
-        resolve(metadata);
-      }
+        })
+        .catch((e) => {
+          reject(e);
+        });
     });
 
   const loadMinted = async () => {

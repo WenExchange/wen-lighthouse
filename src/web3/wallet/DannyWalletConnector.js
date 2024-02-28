@@ -133,7 +133,8 @@ const useDannyWalletConnector = () => {
 
   /** Wallet Values */
   const address = React.useMemo(() => {
-    return wallet?.accounts[0]?.address;
+    const address = wallet?.accounts[0]?.address;
+    return address ? address.toLowerCase() : "";
   }, [wallet]);
 
   const balacne = React.useMemo(() => {

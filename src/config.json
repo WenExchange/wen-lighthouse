@@ -10,16 +10,18 @@
   "nft_name_type": "default",
   "groups": [
     {
-      "name": "Team",
-      "allowlist": ["0xc138b0459DD44543f03C47F476F35c173a3F4071"]
-    },
-    {
       "name": "Main Mint WL",
-      "allowlist": ["0xc138b0459DD44543f03C47F476F35c173a3F4071"]
+      "allowlist": [
+        "0xc138b0459DD44543f03C47F476F35c173a3F4071",
+        "0x90F79bf6EB2c4f870365E785982E1f101E93b906"
+      ]
     },
     {
       "name": "Main Mint Public",
-      "allowlist": ["0xc138b0459DD44543f03C47F476F35c173a3F4071"]
+      "allowlist": [
+        "0xc138b0459DD44543f03C47F476F35c173a3F4071",
+        "0x90F79bf6EB2c4f870365E785982E1f101E93b906"
+      ]
     }
   ]
 }

@@ -35,18 +35,18 @@ export default function useWOPCollectionData() {
       const symbol = "WEN OG";
       const tokenUri = "https://nftfile.actpass.com/json";
       const mint_groups = [
-        {
-          name: "Team",
-          start_time: "1709153188",
-          end_time: "1709160388",
-          max_tokens: 10,
-          unit_price: "0",
-          market_root: []
-        },
+        // {
+        //   name: "Team",
+        //   start_time: "1709153188",
+        //   end_time: "1709160388",
+        //   max_tokens: 10,
+        //   unit_price: "0",
+        //   market_root: []
+        // },
         {
           name: "Main Mint WL",
-          start_time: "1709160389",
-          end_time: "1709160390",
+          start_time: "1709153188",
+          end_time: "1709160388",
           max_tokens: 1,
           unit_price: "0",
           market_root: []
@@ -63,9 +63,9 @@ export default function useWOPCollectionData() {
       const phases = mint_groups.map((group) => {
         return {
           ...group,
-          allowlist: config.groups.find(
-            (configGroup) => configGroup.name === group.name
-          ).allowlist,
+          allowlist: config.groups
+            .find((configGroup) => configGroup.name === group.name)
+            .allowlist.map((address) => address.toLowerCase()),
           noend: false
         };
       });

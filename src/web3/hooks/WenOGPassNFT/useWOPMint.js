@@ -64,6 +64,7 @@ export default function useWOPMint() {
     } catch (error) {
       setTxState(ContractCallState.ERROR);
       console.error(error.message);
+      throw new Error(error);
     }
   };
 

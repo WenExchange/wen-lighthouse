@@ -18,20 +18,20 @@ const App = () => {
   return (
     <RecoilRoot>
       <DannyOnboardProvider>
-        {/* <DannySnackbarProvider> */}
-        <Home />
-        <Toaster
-          position="top-center"
-          reverseOrder={false}
-          toastOptions={{
-            style: {
-              border: "1px solid " + color.black,
-              color: color.white,
-              background: Hex2Rgba(color.black, 0.95)
-            }
-          }}
-        />
-        {/* </DannySnackbarProvider> */}
+        <DannySnackbarProvider>
+          <Home />
+          <Toaster
+            position="top-center"
+            reverseOrder={false}
+            toastOptions={{
+              style: {
+                border: "1px solid " + color.black,
+                color: color.white,
+                background: Hex2Rgba(color.black, 0.95)
+              }
+            }}
+          />
+        </DannySnackbarProvider>
       </DannyOnboardProvider>
     </RecoilRoot>
   );

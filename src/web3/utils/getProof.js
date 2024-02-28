@@ -18,14 +18,14 @@ let proof = [];
 const userWalletAddress = "0x976EA74026E726554dB657fA54763abd0C3a0aa9";
 
 if (whitelist.includes(userWalletAddress)) {
-  const { keccak256 } = ethers.utils;
+  const { keccak256 } = ethers;
   let leaves = whitelist.map((addr) => keccak256(addr));
   const merkleTree = new MerkleTree(leaves, keccak256, { sortPairs: true });
   let hashedAddress = keccak256(userWalletAddress);
   proof = merkleTree.getHexProof(hashedAddress);
 }
 
-console.log(proof);
+console.log(555, proof);
 // Return proof to web
 // }
 
