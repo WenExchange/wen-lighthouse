@@ -17,6 +17,8 @@ const merkleTree = new MerkleTree(leaves, keccak256, { sortPairs: true });
 // Save this value to smartcontract
 const merkleRootHash = merkleTree.getHexRoot();
 
+console.log(333, merkleTree.getRoot());
+
 export const getMerkleRoot = () => {
   return merkleRootHash;
 };

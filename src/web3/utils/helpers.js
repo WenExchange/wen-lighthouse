@@ -1,6 +1,3 @@
-import Moralis from "moralis";
-import { EvmChain } from "@moralisweb3/common-evm-utils";
-
 export const Hex2Rgba = (hex, alpha) => {
   const r = parseInt(hex.slice(1, 3), 16);
   const g = parseInt(hex.slice(3, 5), 16);

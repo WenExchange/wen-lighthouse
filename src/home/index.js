@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useMemo } from "react";
 import * as C from "./style";
 import { useWalletConnect } from "hooks/walletConnect";
-
+import { ethers } from "ethers";
 import config from "config.json";
 import { Bg } from "styles/bg";
 import Wallet, { DropdownItem } from "components/wallet";
@@ -27,6 +27,7 @@ import useDanyDidMount from "../hooks/walletConnect/helper/useDanyDidMount";
 import { getMerkleRoot } from "../web3/utils/getMerkleRoot";
 import useWOPBalanceOf from "web3/hooks/WenOGPassNFT/ReadOnly/useWOPBalanceOf";
 import useETHBalance from "../web3/hooks/ETH/useETHBalance";
+import useWOPMint from "../web3/hooks/WenOGPassNFT/useWOPMint";
 
 const LIGHTHOUSE_CONTRACT_ATLANTIC_2 =
   "sei12gjnfdh2kz06qg6e4y997jfgpat6xpv9dw58gtzn6g75ysy8yt5snzf4ac";
@@ -112,6 +113,13 @@ const Home = () => {
     fetchETHBalance
   } = useETHBalance();
 
+  const {
+    isCallSuccessWOPMint,
+    isLoadingWOPMint,
+
+    /** Tx */
+    fetchWOPMint
+  } = useWOPMint();
   useEffect(() => {
     refresh();
     // clearInterval(interval);
@@ -310,111 +318,63 @@ const Home = () => {
     }
 
     //load client
-    const client = await getSigningCosmWasmClient(
-      config.rpc,
-      wallet.offlineSigner,
-      {
-        gasPrice: GasPrice.fromString("0.01usei")
-      }
-    );
+    // const client = await getSigningCosmWasmClient(
+    //   config.rpc,
+    //   wallet.offlineSigner,
+    //   {
+    //     gasPrice: GasPrice.fromString("0.01usei")
+    //   }
+    // );
 
-    let lighthouseConfig = await client.queryContractSmart(
-      getLighthouseContract(config.network),
-      { get_config: {} }
-    );
+    // let lighthouseConfig = await client.queryContractSmart(
+    //   getLighthouseContract(config.network),
+    //   { get_config: {} }
+    // );
 
     //check if wallet have enough balance
-    if (
-      currentPhase.unit_price > 0 &&
-      new BigNumber(currentPhase.unit_price)
-        .div(1e6)
-        .plus(new BigNumber(lighthouseConfig.fee).div(1e6))
-        .times(amount)
-        .gt(new BigNumber(balance))
-    ) {
-      toast.error("Insufficient balance");
-      return;
-    }
 
     let merkleProof = null;
     let hashedAddress = null;
 
     if (currentPhase.merkle_root !== "" && currentPhase.merkle_root !== null) {
-      let hashedWallets = currentPhase.allowlist.map(keccak_256);
-      const tree = new MerkleTree(hashedWallets, keccak_256, {
-        sortPairs: true
-      });
-      merkleProof = tree
-        .getProof(Buffer.from(keccak_256(wallet?.accounts[0].address)))
-        .map((element) => Array.from(element.data));
-      hashedAddress = Array.from(
-        Buffer.from(keccak_256(wallet?.accounts[0].address))
-      );
+      const { keccak256 } = ethers;
+      let leaves = currentPhase.allowlist.map((addr) => keccak256(addr));
+      const merkleTree = new MerkleTree(leaves, keccak256, { sortPairs: true });
+      console.log(333, "merkleTree", merkleTree);
+
+      hashedAddress = keccak256(address);
+      console.log(333, "hashedAddress", hashedAddress);
+      merkleProof = merkleTree.getHexProof(hashedAddress);
+      console.log(333, "merkleProof", merkleProof);
     }
 
-    const instruction = {
-      contractAddress: getLighthouseContract(config.network),
-      msg: {
-        mint_native: {
-          collection: config.collection_address,
-          group: currentPhase.name,
-          recipient: wallet?.accounts[0].address,
-          merkle_proof: merkleProof,
-          hashed_address: hashedAddress
-        }
-      }
-    };
-
-    if (currentPhase.unit_price != 0) {
-      instruction.funds = [
-        {
-          denom: "usei",
-          amount: new BigNumber(currentPhase.unit_price)
-            .plus(new BigNumber(lighthouseConfig.fee))
-            .toString()
-        }
-      ];
-    }
-
-    let instructions = [];
-
-    for (let i = 0; i < amount; i++) {
-      instructions.push(instruction);
-    }
-
-    let loading = toast.loading("Minting...");
     try {
-      const mintReceipt = await client.executeMultiple(
-        wallet?.accounts[0].address,
-        instructions,
-        "auto"
-      );
-      toast.dismiss(loading);
-      toast.success("Minted successfully");
+      const receipt = await fetchWOPMint([`\'${merkleProof}\'`]);
 
-      //console.log(mintReceipt)
+      // let tokenIds = [];
 
-      let tokenIds = [];
+      // const logs = mintReceipt.logs;
+      // for (const log of logs) {
+      //   const events = log.events;
+      //   for (const event of events) {
+      //     if (event.type === "wasm") {
+      //       // Find the attribute with the key 'collection'
+      //       for (const attribute of event.attributes) {
+      //         if (attribute.key === "token_id") {
+      //           tokenIds.push(attribute.value);
+      //           break;
+      //         }
+      //       }
+      //     }
+      //   }
+      // }
 
-      const logs = mintReceipt.logs;
-      for (const log of logs) {
-        const events = log.events;
-        for (const event of events) {
-          if (event.type === "wasm") {
-            // Find the attribute with the key 'collection'
-            for (const attribute of event.attributes) {
-              if (attribute.key === "token_id") {
-                tokenIds.push(attribute.value);
-                break;
-              }
-            }
-          }
-        }
-      }
+      console.log(444, "receipt", receipt);
 
       refresh();
       refreshMyMintedNfts();
 
+      let tokenIds = [0];
       loadNowMintedMetadata(tokenIds)
         .then((metadata) => {
           setMintedInfo({ mints: metadata });

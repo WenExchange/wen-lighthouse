@@ -24,7 +24,6 @@ export default function useWOPCollectionData() {
   const fetch = async () => {
     try {
       const contract = WenOGPassNFTContract();
-      console.log(444, "contract", contract);
       setCollectionDataState(ContractCallState.FETCHING);
 
       const admin = "0xc138b0459DD44543f03C47F476F35c173a3F4071";
@@ -70,7 +69,6 @@ export default function useWOPCollectionData() {
           noend: false
         };
       });
-
       let mintedSupply = await contract.getTokenCounter({
         from: address
       });
