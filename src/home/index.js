@@ -1,19 +1,13 @@
 import { useState, useEffect, useRef, useMemo } from "react";
 import * as C from "./style";
-import { useWalletConnect } from "hooks/walletConnect";
 import { ethers } from "ethers";
 import config from "config.json";
-import { Bg } from "styles/bg";
 import Wallet, { DropdownItem } from "components/wallet";
-import { getSigningCosmWasmClient } from "@sei-js/core";
-import { SigningCosmWasmClient } from "@cosmjs/cosmwasm-stargate";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDiscord, faTwitter } from "@fortawesome/free-brands-svg-icons";
 import { faCircleNotch, faGlobe } from "@fortawesome/free-solid-svg-icons";
 import BigNumber from "bignumber.js";
 import { Timer } from "components/timer";
-import { GasPrice } from "@cosmjs/stargate";
-import { keccak_256 } from "@noble/hashes/sha3";
 import { MerkleTree } from "merkletreejs";
 import { toast } from "react-hot-toast";
 import MintedModal from "components/mintedModal";
@@ -23,30 +17,13 @@ import CatChecker from "components/CatChecker";
 import DannyWalletConnector from "../web3/wallet/DannyWalletConnector";
 import DanyLoadingLayout from "../components/Loading/DanyLoadingLayout";
 import useWOPCollectionData from "../web3/hooks/WenOGPassNFT/ReadOnly/useWOPCollectionData";
-import useDanyDidMount from "../hooks/walletConnect/helper/useDanyDidMount";
+import useDanyDidMount from "../hooks/helper/useDanyDidMount";
 import { getMerkleRoot } from "../web3/utils/getMerkleRoot";
 import Proof from "../web3/utils/getProof";
 
 import useWOPBalanceOf from "web3/hooks/WenOGPassNFT/ReadOnly/useWOPBalanceOf";
 import useETHBalance from "../web3/hooks/ETH/useETHBalance";
 import useWOPMint from "../web3/hooks/WenOGPassNFT/useWOPMint";
-
-const LIGHTHOUSE_CONTRACT_ATLANTIC_2 =
-  "sei12gjnfdh2kz06qg6e4y997jfgpat6xpv9dw58gtzn6g75ysy8yt5snzf4ac";
-const LIGHTHOUSE_CONTRACT_PACIFIC_1 =
-  "sei1hjsqrfdg2hvwl3gacg4fkznurf36usrv7rkzkyh29wz3guuzeh0snslz7d";
-
-const getLighthouseContract = (network) => {
-  if (network === "pacific-1") {
-    return LIGHTHOUSE_CONTRACT_PACIFIC_1;
-  } else if (network === "atlantic-2") {
-    return LIGHTHOUSE_CONTRACT_ATLANTIC_2;
-  } else if (network === "sei-chain") {
-    return "sei1j5uc8aly825mnjl0napky8nxnnkmcqpl2lx8dud29xyhw2dmr24s6lquut";
-  } else {
-    throw new Error("Invalid network");
-  }
-};
 
 var phaseTimer = {};
 var interval = null;

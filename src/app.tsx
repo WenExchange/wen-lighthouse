@@ -5,7 +5,6 @@ import DannySnackbarProvider from "./components/DanySnackBar/DannySnackbarProvid
 
 import config from "./config.json";
 import Home from "./home";
-import { WalletConnectProvider } from "hooks/walletConnect";
 import { Toaster } from "react-hot-toast";
 import { color } from "styles/theme";
 import { Hex2Rgba } from "utils/helpers";

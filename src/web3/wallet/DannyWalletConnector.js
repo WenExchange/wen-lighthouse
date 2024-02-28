@@ -3,7 +3,7 @@ import { isProduction } from "../../utils/constants";
 import { useConnectWallet, useSetChain, useWallets } from "@web3-onboard/react";
 import { ethers } from "ethers";
 import { CHAINS, AnkrRPCProvider, RPC_URL } from "../constants";
-import useDanyDidMount from "../../hooks/walletConnect/helper/useDanyDidMount";
+import useDanyDidMount from "../../hooks/helper/useDanyDidMount";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { walletState } from "../../recoil/auth/atoms";
 import { createContainer } from "unstated-next";
