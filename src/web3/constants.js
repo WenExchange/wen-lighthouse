@@ -11,6 +11,7 @@ export const CHAINS = {
     id: "0x1",
     token: "ETH",
     label: "Ethereum Mainnet",
+    // rpcUrl: "https://eth.merkle.io"
     rpcUrl:
       "https://rpc.ankr.com/eth/c657bef90ad95db61eef20ff757471d11b8de5482613002038a6bf9d8bb84494"
   },
@@ -18,7 +19,6 @@ export const CHAINS = {
     id: "0xa0c71fd",
     token: "ETH",
     label: "Sepolia",
-    // rpcUrl: "https://sepolia.blast.io",
     rpcUrl:
       "https://rpc.ankr.com/blast_testnet_sepolia/c657bef90ad95db61eef20ff757471d11b8de5482613002038a6bf9d8bb84494"
   }

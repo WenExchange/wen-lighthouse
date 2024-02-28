@@ -31,7 +31,7 @@ const LIGHTHOUSE_CONTRACT_ATLANTIC_2 =
 const LIGHTHOUSE_CONTRACT_PACIFIC_1 =
   "sei1hjsqrfdg2hvwl3gacg4fkznurf36usrv7rkzkyh29wz3guuzeh0snslz7d";
 
-const getLighthouseContract = (network: string) => {
+const getLighthouseContract = (network) => {
   if (network === "pacific-1") {
     return LIGHTHOUSE_CONTRACT_PACIFIC_1;
   } else if (network === "atlantic-2") {
@@ -43,46 +43,46 @@ const getLighthouseContract = (network: string) => {
   }
 };
 
-var phaseTimer: any = {};
-var interval: any = null;
+var phaseTimer = {};
+var interval = null;
 var phaseSwitch = false;
 
 const Home = () => {
-  const {
-    openWalletConnect: connectWallet,
-    wallet,
-    address,
-    disconnectWallet
-  } = useWalletConnect();
-
   // const {
+  //   openWalletConnect: connectWallet,
   //   wallet,
   //   address,
-  //   isWalletConnected,
-  //   connectWallet,
   //   disconnectWallet
-  // } = DannyWalletConnector.useContainer();
+  // } = useWalletConnect();
+
+  const {
+    wallet,
+    address,
+    isWalletConnected,
+    connectWallet,
+    disconnectWallet
+  } = DannyWalletConnector.useContainer();
 
   const [loading, setLoading] = useState(true);
-  const [collection, setCollection] = useState<any>(null);
-  const [phases, setPhases] = useState<any[]>([]);
-  const [currentPhase, setCurrentPhase] = useState<any>(null);
+  const [collection, setCollection] = useState(null);
+  const [phases, setPhases] = useState([]);
+  const [currentPhase, setCurrentPhase] = useState(null);
   const [walletWhitelisted, setWalletWhitelisted] = useState(true);
-  const [myMintedNfts, setMyMintedNfts] = useState<any[]>([]);
-  const [myMintedNftsData, setMyMintedNftsData] = useState<any[]>([]);
+  const [myMintedNfts, setMyMintedNfts] = useState([]);
+  const [myMintedNftsData, setMyMintedNftsData] = useState([]);
 
   const [amount, setAmount] = useState(1);
-  const amountInput = useRef<any>(null);
+  const amountInput = useRef(null);
 
   const [showMintedModal, setShowMintedModal] = useState(false);
-  const [mintedInfo, setMintedInfo] = useState<any>({});
+  const [mintedInfo, setMintedInfo] = useState({});
   const [showMintedNfts, setShowMintedNfts] = useState(false);
   const [balance, setBalance] = useState("");
 
   const {
     collectionData,
 
-    isLoadingCollectionData: isLoading,
+    isLoadingCollectionData,
     isCallSuccessCollectionData: isCallSuccess,
 
     fetchCollectionData
@@ -105,14 +105,17 @@ const Home = () => {
     console.log(555, "root", root);
   });
 
+  useDanyDidMount(() => {
+    setLoading(isLoadingCollectionData);
+  }, [isLoadingCollectionData]);
+
   const refresh = async () => {
     const collectionData = await fetchCollectionData();
     console.log(444, "collectionData", collectionData);
 
     setCollection(collectionData);
-    // managePhases(collectionData.phases);
-    // setLoading(false);
-    // refreshMyMintedNfts();
+    managePhases(collectionData.phases);
+    refreshMyMintedNfts();
 
     // const client = await SigningCosmWasmClient.connect(config.rpc);
     // client
@@ -166,13 +169,13 @@ const Home = () => {
     }
     const client = await SigningCosmWasmClient.connect(config.rpc);
 
-    let balance = await client.getBalance(wallet!.accounts[0].address, "usei");
+    let balance = await client.getBalance(wallet?.accounts[0].address, "usei");
     setBalance(new BigNumber(balance.amount).div(1e6).toString());
 
     client
       .queryContractSmart(getLighthouseContract(config.network), {
         balance_of: {
-          address: wallet!.accounts[0].address,
+          address: wallet?.accounts[0].address,
           collection: config.collection_address
         }
       })
@@ -183,7 +186,7 @@ const Home = () => {
       });
   };
 
-  const managePhases = (phases: any[]) => {
+  const managePhases = (phases) => {
     let currentPhase = null;
 
     for (let i = 0; i < phases.length; i++) {
@@ -221,7 +224,7 @@ const Home = () => {
     }
 
     //order phases by start date
-    phases.sort((a: any, b: any) => {
+    phases.sort((a, b) => {
       let aStart = new Date(a.start_time);
       let bStart = new Date(b.start_time);
 
@@ -272,14 +275,14 @@ const Home = () => {
     }
   };
 
-  const manageWhitelist = (currentPhase: any) => {
+  const manageWhitelist = (currentPhase) => {
     if (wallet !== null) {
       if (
         typeof currentPhase.allowlist !== "undefined" &&
         currentPhase.allowlist !== null
       ) {
         let allowlist = currentPhase.allowlist.find(
-          (a: any) => a === wallet!.accounts[0].address
+          (a) => a === wallet?.accounts[0].address
         );
         if (allowlist) {
           setWalletWhitelisted(true);
@@ -294,7 +297,7 @@ const Home = () => {
     }
   };
 
-  const switchPhase = (phase: any) => {
+  const switchPhase = (phase) => {
     if (
       (!phase.noend && new Date(phase.end_time) < new Date()) ||
       phase.name === currentPhase.name
@@ -386,8 +389,8 @@ const Home = () => {
       return;
     }
 
-    let merkleProof: any = null;
-    let hashedAddress: any = null;
+    let merkleProof = null;
+    let hashedAddress = null;
 
     if (currentPhase.merkle_root !== "" && currentPhase.merkle_root !== null) {
       let hashedWallets = currentPhase.allowlist.map(keccak_256);
@@ -395,20 +398,20 @@ const Home = () => {
         sortPairs: true
       });
       merkleProof = tree
-        .getProof(Buffer.from(keccak_256(wallet!.accounts[0].address)))
+        .getProof(Buffer.from(keccak_256(wallet?.accounts[0].address)))
         .map((element) => Array.from(element.data));
       hashedAddress = Array.from(
-        Buffer.from(keccak_256(wallet!.accounts[0].address))
+        Buffer.from(keccak_256(wallet?.accounts[0].address))
       );
     }
 
-    const instruction: any = {
+    const instruction = {
       contractAddress: getLighthouseContract(config.network),
       msg: {
         mint_native: {
           collection: config.collection_address,
           group: currentPhase.name,
-          recipient: wallet!.accounts[0].address,
+          recipient: wallet?.accounts[0].address,
           merkle_proof: merkleProof,
           hashed_address: hashedAddress
         }
@@ -435,7 +438,7 @@ const Home = () => {
     let loading = toast.loading("Minting...");
     try {
       const mintReceipt = await client.executeMultiple(
-        wallet!.accounts[0].address,
+        wallet?.accounts[0].address,
         instructions,
         "auto"
       );
@@ -444,7 +447,7 @@ const Home = () => {
 
       //console.log(mintReceipt)
 
-      let tokenIds: any[] = [];
+      let tokenIds = [];
 
       const logs = mintReceipt.logs;
       for (const log of logs) {
@@ -466,7 +469,7 @@ const Home = () => {
       refreshMyMintedNfts();
 
       loadNowMintedMetadata(tokenIds)
-        .then((metadata: any) => {
+        .then((metadata) => {
           setMintedInfo({ mints: metadata });
           setShowMintedModal(true);
         })
@@ -475,7 +478,7 @@ const Home = () => {
           setShowMintedModal(true);
           console.log(e);
         });
-    } catch (e: any) {
+    } catch (e) {
       toast.dismiss(loading);
       if (e.message.includes("Max Tokens Minted"))
         toast.error(
@@ -489,10 +492,10 @@ const Home = () => {
     }
   };
 
-  const loadNowMintedMetadata = async (mints: any) =>
+  const loadNowMintedMetadata = async (mints) =>
     new Promise(async (resolve, reject) => {
-      let metadata: any[] = [];
-      let promises: any[] = [];
+      let metadata = [];
+      let promises = [];
 
       if (!collection.hidden_metadata) {
         if (!collection.iterated_uri) {
@@ -507,7 +510,7 @@ const Home = () => {
           Promise.all(promises)
             .then((results) => {
               //merge with myMintedNfts
-              mints.forEach((mint: any, index: number) => {
+              mints.forEach((mint, index) => {
                 metadata.push({
                   mint: mint,
                   data: results[index]
@@ -560,8 +563,8 @@ const Home = () => {
     setShowMintedNfts(true);
     setMyMintedNftsData([]);
 
-    let metadata: any[] = [];
-    let promises: any[] = [];
+    let metadata = [];
+    let promises = [];
 
     if (!collection.hidden_metadata) {
       if (!collection.iterated_uri) {
@@ -576,7 +579,7 @@ const Home = () => {
         Promise.all(promises)
           .then((results) => {
             //merge with myMintedNfts
-            myMintedNfts.forEach((mint: any, index: number) => {
+            myMintedNfts.forEach((mint, index) => {
               metadata.push({
                 mint: mint,
                 data: results[index]
@@ -719,11 +722,11 @@ const Home = () => {
             {wallet !== null && (
               <Wallet
                 balance={balance + " ETH"}
-                address={wallet!.accounts[0].address}
+                address={wallet?.accounts[0].address}
               >
                 <DropdownItem
                   onClick={() =>
-                    navigator.clipboard.writeText(wallet!.accounts[0].address)
+                    navigator.clipboard.writeText(wallet?.accounts[0].address)
                   }
                 >
                   Copy Address
@@ -902,8 +905,7 @@ const Home = () => {
                       </C.Amount> */}
                     </C.MintInfo>
                     <C.MintButton
-                      // onClick={mint}
-
+                      onClick={mint}
                       disabled={
                         walletWhitelisted === false ||
                         collection.supply - collection.mintedSupply <= 0
@@ -937,7 +939,7 @@ const Home = () => {
                     </C.GoBack>
                   </C.MintedNftsHeader>
                   <C.MintedNftsBody>
-                    {myMintedNftsData.map((mint: any, i: any) => (
+                    {myMintedNftsData.map((mint, i) => (
                       <C.Nft key={i}>
                         <C.NftImage src={`${mint.data.image}`}></C.NftImage>
                         <C.NftTitle>

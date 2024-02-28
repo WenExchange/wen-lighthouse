@@ -38,24 +38,24 @@ export default function useWOPCollectionData() {
       const mint_groups = [
         {
           name: "Team",
-          start_time: "1709145192",
-          end_time: "1709155192",
+          start_time: "1709151180",
+          end_time: "1709151300",
           max_tokens: 10,
           unit_price: "0",
           market_root: []
         },
         {
           name: "Main Mint WL",
-          start_time: "1709145192",
-          end_time: "1709155192",
+          start_time: "1709151301",
+          end_time: "1709151420",
           max_tokens: 1,
           unit_price: "0",
           market_root: []
         },
         {
           name: "Main Mint Public",
-          start_time: "1709155193",
-          end_time: "1709155194",
+          start_time: "1709151421",
+          end_time: "1709151540",
           max_tokens: 1,
           unit_price: "0",
           market_root: []
@@ -83,7 +83,7 @@ export default function useWOPCollectionData() {
         symbol,
         tokenUri,
         phases,
-        mintedSupply
+        mintedSupply: Number(mintedSupply)
       };
 
       setCollectionDataState(ContractCallState.SUCCESS);
