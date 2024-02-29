@@ -108,7 +108,7 @@ export const WAddress = styled.div`
 export const Launch = styled.div<{ showMintedNfts?: string }>`
   margin-top: 16px;
   min-height: 769px;
-  background: linear-gradient(180deg, #15232d 0%, #0a141b 100%);
+  background: linear-gradient(180deg, #181818 0%, #0a141b 100%);
   box-shadow: 0px 11.8109px 53.1492px rgba(0, 0, 0, 0.35);
   border-radius: 16px;
   padding: 70px 56px;
@@ -152,7 +152,6 @@ export const Launch = styled.div<{ showMintedNfts?: string }>`
 `;
 
 export const LaunchBg = styled.div`
-  background-image: url("/images/mintbg.png");
   background-position: 100% 0%;
   background-repeat: no-repeat;
   background-size: 50%;
@@ -347,7 +346,7 @@ export const Image = styled.div`
 
 export const MintInfo = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: end;
   align-items: center;
   margin-top: 24px;
 `;
