@@ -20,7 +20,7 @@ export const CHAINS = {
     token: "ETH",
     label: "Sepolia",
     rpcUrl:
-      "https://rpc.ankr.com/blast_testnet_sepolia/c657bef90ad95db61eef20ff757471d11b8de5482613002038a6bf9d8bb84494"
+      "https://rpc.ankr.com/eth_sepolia/c657bef90ad95db61eef20ff757471d11b8de5482613002038a6bf9d8bb84494"
   }
 };
 export const ContractCallState = {
@@ -32,7 +32,7 @@ export const ContractCallState = {
 
 export const RPC_URL = isProduction
   ? ""
-  : "https://rpc.ankr.com/blast_testnet_sepolia/c657bef90ad95db61eef20ff757471d11b8de5482613002038a6bf9d8bb84494";
+  : "https://rpc.ankr.com/eth_sepolia/c657bef90ad95db61eef20ff757471d11b8de5482613002038a6bf9d8bb84494";
 
 export const AnkrRPCProvider = new ethers.JsonRpcProvider(
   // CHAINS[isProduction ? "ETHEREUM" : "SEPOLIA"].rpcUrl

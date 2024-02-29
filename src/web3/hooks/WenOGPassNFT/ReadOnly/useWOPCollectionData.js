@@ -25,64 +25,55 @@ export default function useWOPCollectionData() {
     try {
       const contract = WenOGPassNFTContract();
       setCollectionDataState(ContractCallState.FETCHING);
+      console.log(333, "config", config);
 
-      const admin = "0xc138b0459DD44543f03C47F476F35c173a3F4071";
-      const cw721_address = "0xED5387653A42705fAf8b32b3Fb6dB68E634a3586";
-      const name = "Wen OG Pass";
-      let next_token_id = 0;
-      const start_order = 0;
-      const supply = 1000;
-      const symbol = "WEN OG";
-      const tokenUri = "https://nftfile.actpass.com/json";
-      const mint_groups = [
-        // {
-        //   name: "Team",
-        //   start_time: "1709153188",
-        //   end_time: "1709160388",
-        //   max_tokens: 10,
-        //   unit_price: "0",
-        //   market_root: []
-        // },
-        {
-          name: "Main Mint WL",
-          start_time: "1709153188",
-          end_time: "1709160388",
-          max_tokens: 1,
-          unit_price: "0",
-          market_root: []
-        },
-        {
-          name: "Main Mint Public",
-          start_time: "1709160391",
-          end_time: "1709160392",
-          max_tokens: 1,
-          unit_price: "0",
-          market_root: []
-        }
-      ];
-      const phases = mint_groups.map((group) => {
+      // const mint_groups = [
+      //   // {
+      //   //   name: "Team",
+      //   //   start_time: "1709153188",
+      //   //   end_time: "1709160388",
+      //   //   max_tokens: 10,
+      //   //   unit_price: "0",
+      //   //   market_root: []
+      //   // },
+      //   {
+      //     name: "Main Mint WL",
+      //     start_time: "1709153188",
+      //     end_time: "1709160388",
+      //     max_tokens: 1,
+      //     unit_price: "0",
+      //     market_root: []
+      //   },
+      //   {
+      //     name: "Main Mint Public",
+      //     start_time: "1709160391",
+      //     end_time: "1709160392",
+      //     max_tokens: 1,
+      //     unit_price: "0",
+      //     market_root: []
+      //   }
+      // ];
+      const phases = config.groups.map((group) => {
         return {
           ...group,
-          allowlist: config.groups
-            .find((configGroup) => configGroup.name === group.name)
-            .allowlist.map((address) => address.toLowerCase()),
+          allowlist: group.allowlist.map((address) => address.toLowerCase()),
           noend: false
         };
       });
+
+      console.log(333, "config", config);
+
       let mintedSupply = await contract.getTokenCounter({
         from: address
       });
 
       const collectionData = {
-        admin,
-        cw721_address,
-        name,
-        supply,
-        symbol,
-        tokenUri,
+        ...config,
         phases,
         mintedSupply: Number(mintedSupply)
       };
+
+      console.log(333, "collectionData", collectionData);
 
       setCollectionDataState(ContractCallState.SUCCESS);
       setCollectionData(collectionData);

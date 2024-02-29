@@ -553,7 +553,7 @@ const Home = () => {
         <C.Launch showMintedNfts={showMintedNfts ? "true" : "false"}>
           {loading && <DanyLoadingLayout />}
 
-          {!loading && (
+          {!loading && collection && (
             <>
               <C.LaunchBg></C.LaunchBg>
               {!showMintedNfts && (
@@ -563,27 +563,40 @@ const Home = () => {
                     <C.TotalMinted>
                       <C.TotalMintedInfo>
                         <C.TotalMintedTitle>TOTAL MINTED</C.TotalMintedTitle>
-                        <C.TotalMintedValue>
-                          {Math.floor(
-                            (collection.mintedSupply / collection.supply) *
-                              100 *
-                              100
-                          ) / 100}
-                          %{" "}
-                          <span>
-                            {collection.mintedSupply}/{collection.supply}
-                          </span>
-                        </C.TotalMintedValue>
+                        {collection && (
+                          <C.TotalMintedValue>
+                            {collection?.mintedSupply
+                              ? Math.floor(
+                                  (collection.mintedSupply /
+                                    collection.supply) *
+                                    100 *
+                                    100
+                                ) / 100
+                              : 0}
+                            %{" "}
+                            <span>
+                              {collection?.mintedSupply
+                                ? collection.mintedSupply
+                                : 0}
+                              /{collection.supply}
+                            </span>
+                          </C.TotalMintedValue>
+                        )}
                       </C.TotalMintedInfo>
-                      <C.TotalMintedProgress
-                        value={
-                          Math.floor(
-                            (collection.mintedSupply / collection.supply) *
-                              100 *
-                              100
-                          ) / 100
-                        }
-                      ></C.TotalMintedProgress>
+                      {collection && (
+                        <C.TotalMintedProgress
+                          value={
+                            collection?.mintedSupply
+                              ? Math.floor(
+                                  (collection.mintedSupply /
+                                    collection.supply) *
+                                    100 *
+                                    100
+                                ) / 100
+                              : 0
+                          }
+                        ></C.TotalMintedProgress>
+                      )}
                     </C.TotalMinted>
 
                     <C.Description>{config.description}</C.Description>

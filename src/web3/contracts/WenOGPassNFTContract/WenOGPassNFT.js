@@ -1,9 +1,8 @@
 import { isProduction } from "../../../utils/constants";
+import config from "../../../config.json"
 
 import WenOGPassNFT from "./WenOGPassNFT.json";
 export default {
-  address: isProduction
-    ? "0xED5387653A42705fAf8b32b3Fb6dB68E634a3586"
-    : "0xED5387653A42705fAf8b32b3Fb6dB68E634a3586",
+  address: config.collection_address,
   abi: WenOGPassNFT.abi
 };
