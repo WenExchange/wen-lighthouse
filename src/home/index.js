@@ -553,7 +553,7 @@ const Home = () => {
         <C.Launch showMintedNfts={showMintedNfts ? "true" : "false"}>
           {loading && <DanyLoadingLayout />}
 
-          {!loading && collection && (
+          {!loading && (
             <>
               <C.LaunchBg></C.LaunchBg>
               {!showMintedNfts && (
