@@ -16,7 +16,8 @@ export const CHAINS = {
       "https://rpc.ankr.com/eth/c657bef90ad95db61eef20ff757471d11b8de5482613002038a6bf9d8bb84494"
   },
   SEPOLIA: {
-    id: "0xa0c71fd",
+    // id: "0xa0c71fd",
+    id: "0xaa36a7",
     token: "ETH",
     label: "Sepolia",
     rpcUrl:
