@@ -672,12 +672,8 @@ const Home = () => {
                           </C.PhaseTop>
                           <C.PhaseBottom>
                             {phase.max_tokens > 0
-                              ? phase.max_tokens + " Per Wallet •"
+                              ? phase.max_tokens + " Per Wallet"
                               : ""}{" "}
-                            {new BigNumber(phase.unit_price)
-                              .div(1e6)
-                              .toString()}{" "}
-                            ETH
                           </C.PhaseBottom>
                           {!phase.noend &&
                             new Date(phase.end_time) < new Date() && (
@@ -695,14 +691,7 @@ const Home = () => {
                     </C.Image>
                     <C.MintInfo>
                       <C.Price>
-                        Price:{" "}
-                        <span>
-                          {new BigNumber(currentPhase.unit_price)
-                            .div(1e6)
-                            .times(amount)
-                            .toString()}{" "}
-                          ETH
-                        </span>
+                        Price: <span>FREE</span>
                       </C.Price>
                       {/* <C.Amount>
                         <C.AmountButton onClick={decrementAmount}>

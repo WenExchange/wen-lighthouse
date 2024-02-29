@@ -25,8 +25,8 @@
         "0xBaA6F05B6FBBaf91FF79A7B067df0146Ff9dA675",
         "0xc138b0459DD44543f03C47F476F35c173a3F4071"
       ],
-      "start_time": "",
-      "end_time": "",
+      "start_time": "1709191080",
+      "end_time": "1709191680",
       "max_tokens": 1,
       "unit_price": "0"
     },
@@ -47,35 +47,8 @@
         "0xBaA6F05B6FBBaf91FF79A7B067df0146Ff9dA675",
         "0x4d84a7c74cB952f9a6DB79DA839212B603a3cE5E"
       ],
-      "start_time": "",
-      "end_time": "",
-      "max_tokens": 1,
-      "unit_price": "0"
-    },
-    {
-      "name": "Main Mint WL",
-      "allowlist": [
-        "0x32e211E0F0Cf0a00b6903261e6E70d34727BfE98",
-        "0x238f101E12cE63Dc475A1f8f079e3086d8c6c9ae",
-        "0xb311Ba41B8F4ed74F5129ff7A306Bff6dB414c44",
-        "0xabC81F048B5851A9Ce1dF28417695a6c02560a5A",
-        "0x0b13734813Ae9B0947F94225F408f102A2cE6C61",
-        "0x465e9172326a471C3953d946723d91fCE4F5c18B"
-      ],
-      "start_time": "",
-      "end_time": "",
-      "max_tokens": 1,
-      "unit_price": "0"
-    },
-    {
-      "name": "Main Mint Public",
-      "allowlist": [
-        "0x9b0726e95e72eB6f305b472828b88D2d2bDD41C7",
-        "0x271ae5A9e689ee106EeF2E70861122Aaf2A3135f",
-        "0x95eE8B32AAC20a4Ca806D801774Fc5e31feCE7D4"
-      ],
-      "start_time": "",
-      "end_time": "",
+      "start_time": "1709191980",
+      "end_time": "1709192580",
       "max_tokens": 1,
       "unit_price": "0"
     }
